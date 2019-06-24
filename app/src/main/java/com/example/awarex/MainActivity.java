@@ -2,6 +2,7 @@ package com.example.awarex;
 
 import android.os.Bundle;
 
+import com.example.awarex.Model.TvShow;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -12,7 +13,11 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
+
+    private ArrayList<TvShow> tvShows = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

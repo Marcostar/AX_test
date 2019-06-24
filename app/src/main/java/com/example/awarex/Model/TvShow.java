@@ -3,6 +3,9 @@ package com.example.awarex.Model;
 public class TvShow {
     public String name, img, air;
 
+    public TvShow() {
+    }
+
     public String getName() {
         return name;
     }

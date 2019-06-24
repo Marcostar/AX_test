@@ -2,22 +2,33 @@ package com.example.awarex;
 
 import android.os.Bundle;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.example.awarex.Model.TvShow;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private RecyclerView tvShowList;
+    private RecyclerView.LayoutManager layoutManager;
     private ArrayList<TvShow> tvShows = new ArrayList<>();
+    private SwipeRefreshLayout refreshLayout;
+    private TextView errorLayout, loadingLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +36,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        errorLayout = findViewById(R.id.errorLayout);
+        loadingLayout = findViewById(R.id.loadingLayout);
+        tvShowList = findViewById(R.id.tvShowList);
+        layoutManager = new LinearLayoutManager(this);
+        tvShowList.setLayoutManager(layoutManager);
 
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        refreshLayout = findViewById(R.id.swipeRefresh);
+        loadingLayout.setVisibility(View.VISIBLE);
+
+
     }
 
     @Override

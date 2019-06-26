@@ -10,6 +10,7 @@ import com.example.awarex.Adapter.TvShowAdapter;
 import com.example.awarex.Model.TvShow;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,9 +32,10 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView tvShow_recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<TvShow> tvShowList = new ArrayList<>();
+    private ArrayList<TvShow> tvShowListFull = new ArrayList<>();
     private SwipeRefreshLayout refreshLayout;
     private TextView errorLayout, loadingLayout;
-    private Boolean visiblity = false;
+    private Boolean visibility = false;
     private TvShowAdapter tvShowAdapter;
 
     @Override
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         tvShow_recyclerView.setLayoutManager(layoutManager);
 
         //recyclerView adapter setup
-        tvShowAdapter = new TvShowAdapter(tvShowList,this);
+        tvShowAdapter = new TvShowAdapter(tvShowList, tvShowListFull, this);
         tvShow_recyclerView.setAdapter(tvShowAdapter);
 
         //Swipe Refresh
@@ -90,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(JSONArray response) {
                 refreshLayout.setRefreshing(false);
                 errorLayout.setVisibility(View.GONE);
-                visiblity = true;
+                visibility = true;
                 try {
                     for(int i = 0; i<response.length(); i++)
                     {
@@ -103,7 +105,13 @@ public class MainActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
+                for (TvShow show : tvShowList) {
+                    try {
+                        tvShowListFull.add((TvShow) show.clone());
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
                 loadingLayout.setVisibility(View.GONE);
                 tvShowAdapter.notifyDataSetChanged();
@@ -140,10 +148,35 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_refresh) {
+            if(!visibility) {
+                if (!refreshLayout.isRefreshing()) {
+                    errorLayout.setVisibility(View.GONE);
+                    refreshLayout.setRefreshing(true);
+                }
+
+                // Start our refresh background task
+                initiateRequest();
+            }
             return true;
         }
+        if (id == R.id.action_search) {
+            SearchView searchView = (SearchView) item.getActionView();
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
 
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    tvShowAdapter.getFilter().filter(newText);
+                    return false;
+                }
+            });
+
+        }
         return super.onOptionsItemSelected(item);
     }
+
 }

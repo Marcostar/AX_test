@@ -1,6 +1,6 @@
 package com.example.awarex.Model;
 
-public class TvShow {
+public class TvShow implements Cloneable {
     public String name, img, air;
 
     public TvShow() {
@@ -28,5 +28,19 @@ public class TvShow {
 
     public void setAir(String air) {
         this.air = air;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        TvShow clone = null;
+        try
+        {
+            clone = (TvShow) super.clone();
+        }
+        catch (CloneNotSupportedException e)
+        {
+            throw new RuntimeException(e);
+        }
+        return clone;
     }
 }

@@ -1,9 +1,12 @@
 package com.example.awarex.Adapter;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,17 +19,20 @@ import com.example.awarex.MySingleton;
 import com.example.awarex.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder> {
+public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder> implements Filterable {
 
     private TextView showName, airingOn;
     private NetworkImageView tvShowImage;
     private ArrayList<TvShow> tvShowList;
+    private ArrayList<TvShow> tvShowListFull;
     private ImageLoader imageLoader;
     Activity activity;
 
-    public TvShowAdapter(ArrayList<TvShow> tvShowList, Activity activity) {
+    public TvShowAdapter(ArrayList<TvShow> tvShowList,ArrayList<TvShow> tvShowListFull, Activity activity) {
         this.tvShowList = tvShowList;
+        this.tvShowListFull = tvShowListFull;
         this.activity = activity;
         imageLoader = MySingleton.getInstance(this.activity).getImageLoader();
     }
@@ -53,6 +59,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
         return tvShowList.size();
     }
 
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView showName, airingOn;
         private NetworkImageView tvShowImage;
@@ -65,4 +72,45 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
             this.tvShowImage = tvShowImage;
         }
     }
+
+    @Override
+    public Filter getFilter() {
+        return searchFilter;
+    }
+
+    private Filter searchFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            ArrayList<TvShow> filteredList = new ArrayList<>();
+            Log.d("Messi", "performFiltering: "+ tvShowList.toString());
+            if (constraint == null || constraint.length()==0)
+            {
+                filteredList.addAll(tvShowListFull);
+            } else {
+                String searchQuery = constraint.toString().toLowerCase().trim();
+
+                for (TvShow show : tvShowListFull)
+                {
+                    if (show.getName().toLowerCase().contains(searchQuery))
+                    {
+                        filteredList.add(show);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            tvShowList.clear();
+            tvShowList.addAll((ArrayList)results.values);
+            notifyDataSetChanged();
+        }
+    };
 }

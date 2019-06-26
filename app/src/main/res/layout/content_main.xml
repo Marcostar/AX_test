@@ -21,7 +21,7 @@
             android:id="@+id/tvShowList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ECEFF1" />
+            android:background="#FFFFFF" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

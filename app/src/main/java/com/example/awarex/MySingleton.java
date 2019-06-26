@@ -7,15 +7,15 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
-/**
- * Created by Dzeko on 11/9/2015.
- */
+
 public class MySingleton {
     private static MySingleton mInstance;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
     private static Context mCtx;
 
+
+    //Cache management file with Android Doc methods
     private MySingleton(Context context) {
         mCtx = context;
         mRequestQueue = getRequestQueue();

@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         tvShowAdapter = new TvShowAdapter(tvShowList, tvShowListFull, this);
         tvShow_recyclerView.setAdapter(tvShowAdapter);
 
-        //Swipe Refresh
+        //Swipe to refresh functionality
         refreshLayout = findViewById(R.id.swipeRefresh);
         loadingLayout.setVisibility(View.VISIBLE);
 
@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
                 R.color.swipe_color_3, R.color.swipe_color_4);
         initiateRequest();
 
+
+        //This function gets called for each refresh call.
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -105,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                //Cloning Arraylist to make deep copy
                 for (TvShow show : tvShowList) {
                     try {
                         tvShowListFull.add((TvShow) show.clone());

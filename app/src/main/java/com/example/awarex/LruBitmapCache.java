@@ -8,9 +8,7 @@ import androidx.collection.LruCache;
 
 import com.android.volley.toolbox.ImageLoader;
 
-/**
- * Created by Dzeko on 11/9/2015.
- */
+//From Android docs for data cache management
 public class LruBitmapCache extends LruCache<String, Bitmap>
         implements ImageLoader.ImageCache {
 

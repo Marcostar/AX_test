@@ -19,7 +19,6 @@ import com.example.awarex.MySingleton;
 import com.example.awarex.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder> implements Filterable {
 
@@ -28,8 +27,10 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
     private ArrayList<TvShow> tvShowList;
     private ArrayList<TvShow> tvShowListFull;
     private ImageLoader imageLoader;
-    Activity activity;
+    private Activity activity;
 
+
+    //Constructor for adapter
     public TvShowAdapter(ArrayList<TvShow> tvShowList,ArrayList<TvShow> tvShowListFull, Activity activity) {
         this.tvShowList = tvShowList;
         this.tvShowListFull = tvShowListFull;
@@ -37,6 +38,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
         imageLoader = MySingleton.getInstance(this.activity).getImageLoader();
     }
 
+    //View creation for each row
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
@@ -60,6 +62,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
     }
 
 
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView showName, airingOn;
         private NetworkImageView tvShowImage;
@@ -78,12 +81,14 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
         return searchFilter;
     }
 
+    //Search function depending on search characters by managing 2 different lists- one
+    // for maintaining original list and other for temporary list
     private Filter searchFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
 
             ArrayList<TvShow> filteredList = new ArrayList<>();
-            Log.d("Messi", "performFiltering: "+ tvShowList.toString());
+
             if (constraint == null || constraint.length()==0)
             {
                 filteredList.addAll(tvShowListFull);
